@@ -1,9 +1,14 @@
-#include <string_view>
+constexpr auto description = "$Format:%(describe:tags,match=v[0-9]*)-static|%ai|%an (%ae)$"sv;
 
-#include "version.h"
+auto const pos1 = description.find("|"sv);
+static_assert(pos1 != ""sv.npos);
+auto const pos2 = description.find("|"sv, pos1 + 1);
+static_assert(pos2 != ""sv.npos);
+auto const pos3 = description.find("|"sv, pos2 + 1);
+static_assert(pos3 == ""sv.npos);
 
-constexpr auto version_details = std::string_view{"$Format:%H-static$"};
-// constexpr auto version_details = std::string{"format:%H|%an (%ae)|%ai"};
 auto build_version = version{
-    .version = std::string{version_details},
+    .version = std::string{description.substr(0, pos1)},
+    .author = std::string{description.substr(pos2 + 1)},
+    .author_date = std::string{description.substr(0, pos2 - pos1 - 1)},
 };
