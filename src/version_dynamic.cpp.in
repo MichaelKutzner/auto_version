@@ -1,5 +1,5 @@
 #include "version.h"
 
 auto build_version = version{
-    .version = "v0.02",
+    .version = std::string{version_details},
 };
