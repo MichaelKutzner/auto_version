@@ -1,0 +1,7 @@
+#include "version.h"
+
+constexpr auto version_details = std::string{"$Format:%H-static$"};
+// constexpr auto version_details = std::string{"format:%H|%an (%ae)|%ai"};
+auto build_version = version{
+    .version = version_details,
+};

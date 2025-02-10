@@ -1,5 +1,7 @@
 #include "version.h"
 
-auto build_version = version{
-    .version = "v0.01",
-};
+#if __has_include("./version_dynamic.cpp.in")
+#include "./version_dynamic.cpp.in"
+#else
+#include "./version_static.cpp.in"
+#endif
