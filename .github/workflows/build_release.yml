@@ -38,8 +38,16 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{env.BUILD_TYPE}}
 
-    - name: Publish
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4.6.0
       with:
         name: auto_version
         path: ${{github.workspace}}/build/auto_version
+
+    - name: Publish Artifact
+      uses: softprops/action-gh-release@v2
+      if: steps.is-release.outputs.IS_RELEASE
+      with:
+        files: auto_version
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
