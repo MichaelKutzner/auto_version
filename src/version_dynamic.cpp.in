@@ -3,7 +3,7 @@ static_assert(pos1 != ""sv.npos);
 auto const pos2 = author_details.find("|"sv, pos1 + 1);
 static_assert(pos2 == ""sv.npos);
 
-auto build_version = version{
+version build_version {
     .version = std::string{version_details},
     .author = std::string{author_details.substr(pos1 + 1)},
     .author_date = std::string{author_details.substr(0, pos1)},
