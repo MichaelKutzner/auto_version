@@ -46,7 +46,6 @@ jobs:
 
     - name: Publish Artifact
       uses: softprops/action-gh-release@v2
-      if: steps.is-release.outputs.IS_RELEASE
       with:
         files: auto_version
       env:
