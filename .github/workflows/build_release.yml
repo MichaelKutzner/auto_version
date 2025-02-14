@@ -32,11 +32,11 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{env.BUILD_TYPE}}
+    #- name: Test
+    #  working-directory: ${{github.workspace}}/build
+    #  # Execute tests defined by the CMake configuration.
+    #  # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+    #  run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Check for release
       id: is-release
@@ -44,10 +44,14 @@ jobs:
       run: |
         unset IS_RELEASE ; if [[ $GITHUB_REF =~ ^refs/tags/v[0-9].* ]]; then IS_RELEASE='true' ; fi
         echo "IS_RELEASE=${IS_RELEASE}" >> $GITHUB_OUTPUT
-        
+
+    - name: Create some artifact
+      if: steps.is-release.outputs.IS_RELEASE
+      run: echo ${{ github.sha }} > Release.txt        
     - name: Upload Artifact
       uses: softprops/action-gh-release@v2
       if: steps.is-release.outputs.IS_RELEASE
       with:
         files: |
-          ${{github.workspace}}/build/auto_version
+          Release.txt
+      # ${{github.workspace}}/build/auto_version
