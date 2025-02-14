@@ -45,15 +45,11 @@ jobs:
         unset IS_RELEASE ; if [[ $GITHUB_REF =~ ^refs/tags/v[0-9].* ]]; then IS_RELEASE='true' ; fi
         echo "IS_RELEASE=${IS_RELEASE}" >> $GITHUB_OUTPUT
 
-    - name: Create some artifact
-      if: steps.is-release.outputs.IS_RELEASE
-      run: echo ${{ github.sha }} > Release.txt        
     - name: Upload Artifact
       uses: softprops/action-gh-release@v2
       if: steps.is-release.outputs.IS_RELEASE
       with:
         files: |
-          Release.txt
-      # ${{github.workspace}}/build/auto_version
+          ${{github.workspace}}/build/auto_version
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
