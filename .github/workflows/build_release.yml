@@ -5,6 +5,7 @@ name: Build and release
 on:
   push:
     branches: [ "main" ]
+    tags: ["*"]
   pull_request:
     branches: [ "main" ]
 
@@ -37,11 +38,16 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{env.BUILD_TYPE}}
 
+    - name: Check for release
+      id: is-release
+      shell: bash
+      run: |
+        unset IS_RELEASE ; if [[ $GITHUB_REF =~ ^refs/tags/v[0-9].* ]]; then IS_RELEASE='true' ; fi
+        echo "IS_RELEASE=${IS_RELEASE}" >> $GITHUB_OUTPUT
+        
     - name: Upload Artifact
-      uses: "marvinpinto/action-automatic-releases@latest"
+      uses: softprops/action-gh-release@v2
+      if: steps.is-release.outputs.IS_RELEASE
       with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: true
-          title: "Development Build"
-          files: ${{github.workspace}}/build/auto_version
+        files: |
+          ${{github.workspace}}/build/auto_version
