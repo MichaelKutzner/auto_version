@@ -1,0 +1,2 @@
+src/version_dynamic.cpp.in export-ignore
+src/version_static.cpp.in export-subst
