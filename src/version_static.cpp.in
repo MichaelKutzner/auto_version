@@ -10,5 +10,5 @@ static_assert(pos3 == ""sv.npos);
 version build_version {
     .version = std::string{description.substr(0, pos1)},
     .author = std::string{description.substr(pos2 + 1)},
-    .author_date = std::string{description.substr(0, pos2 - pos1 - 1)},
+    .author_date = std::string{description.substr(pos1 + 1, pos2 - pos1 - 1)},
 };
